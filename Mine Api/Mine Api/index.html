@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.datatables.net/v/bs5/dt-1.13.4/r-2.4.1/datatables.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>API REST Users</title>
+  </head>
+  <body>
+    <h1>API REST</h1>
+    <h5>
+      Práctica de consumo de recursos a través de endpoints. Métodos GET, POST,
+      PUT y DELETE.
+    </h5>
+    <h6>
+      Utilizacion del backend de prueba de
+      <a href="https://647a6c84d2e5b6101db05861.mockapi.io/users">MockAPI</a>
+    </h6>
+    <div id="main">
+      <!-- <nav class="navbar justify-content-between my-3">
+        <button id="create-user" class="btn btn-secondary" type="button">
+          Crear usuario
+        </button>
+      </nav> -->
+      <div id="table-wrapper" class="table-responsive">
+        <table
+          id="table-user"
+          class="table table-striped table-hover table-info display nowrap"
+          cellspacing="0"
+          width="100%"
+        ></table>
+      </div>
+    </div>
+
+    <div id="modals">
+      <!-- Modal creacion -->
+      <div
+        id="modal-create-user"
+        class="modal fade user-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modal-create-user-title"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-create-user-long-title">
+                Crear usuario
+              </h5>
+            </div>
+            <div class="modal-body">
+              <form action="" method="dialog" id="form-create-user">
+                <div class="mb-3">
+                  <label for="user-name" class="form-label"
+                    >Nombre completo</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="user-name"
+                    name="user-name"
+                    aria-describedby="name-help"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="user-email" class="form-label"
+                    >Correo electronico</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="user-email"
+                    name="user-email"
+                    aria-describedby="email-help"
+                    required
+                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                  />
+                  <div id="email-help" class="form-text">
+                    No compartiremos tu email con nadie.
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="user-phone" class="form-label">Telefono</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="user-phone"
+                    name="user-phone"
+                    aria-describedby="phone-help"
+                    required
+                    pattern="^\d+$"
+                  />
+                  <div id="phone-help" class="form-text">
+                    Sin espacios y ceros
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                data-bs-target="#modal-create-user"
+                aria-label="Cerrar"
+              >
+                Cerrar
+              </button>
+              <button
+                id="submit-create-user"
+                type="submit"
+                form="form-create-user"
+                class="btn btn-primary"
+              >
+                Guardar usuario
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal actualizacion -->
+      <div
+        id="modal-update-user"
+        class="modal fade user-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modal-update-user-title"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-update-user-long-title">
+                Actualizar usuario
+              </h5>
+            </div>
+            <div class="modal-body">
+              <form action="" method="dialog" id="form-update-user">
+                <div class="mb-3">
+                  <input
+                    type="hidden"
+                    class="form-control"
+                    id="user-id"
+                    name="user-id"
+                    value=""
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="user-name" class="form-label"
+                    >Nombre completo</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="user-name"
+                    name="user-name"
+                    aria-describedby="name-help"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="user-email" class="form-label"
+                    >Correo electronico</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="user-email"
+                    name="user-email"
+                    aria-describedby="email-help"
+                    required
+                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                  />
+                  <div id="email-help" class="form-text">
+                    No compartiremos tu email con nadie.
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="user-phone" class="form-label">Telefono</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="user-phone"
+                    name="user-phone"
+                    aria-describedby="phone-help"
+                    required
+                    pattern="^\d+$"
+                  />
+                  <div id="phone-help" class="form-text">
+                    Sin espacios y ceros
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                data-bs-target="#modal-update-user"
+                aria-label="Cerrar"
+              >
+                Cerrar
+              </button>
+              <button
+                id="submit-update-user"
+                type="submit"
+                form="form-update-user"
+                class="btn btn-primary"
+                disabled
+              >
+                Guardar cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal borrado -->
+      <div
+        id="modal-delete-user"
+        class="modal fade user-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modal-delete-user-title"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-delete-user-long-title">
+                Borrar usuario
+              </h5>
+            </div>
+            <div class="modal-body">
+              <form action="" method="dialog" id="form-delete-user">
+                <div class="mb-3">
+                  <input
+                    type="hidden"
+                    class="form-control"
+                    id="user"
+                    name="user"
+                    value=""
+                    required
+                  />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                data-bs-target="#modal-delete-user"
+                aria-label="Cerrar"
+              >
+                Cerrar
+              </button>
+              <button
+                id="submit-delete-user"
+                type="submit"
+                form="form-delete-user"
+                class="btn btn-primary"
+              >
+                Borrar usuario
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/r-2.4.1/datatables.min.js"></script>
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
